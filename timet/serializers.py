@@ -1,30 +1,38 @@
+#serializer file
+
+"""
+used `serializers.ModelSerializer` because it auto-generates fields
+and is way much more easier to use.
+It works directly with django models, automatically generates fields from the model
+"""
+
 from rest_framework import serializers
 from .models import Course, Timetable, Lecturer, Student
 
-class CourseSerializer(serializers.Serializer):
+class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = '__all__'
+        fields = '__all__' # include all fields from the model
 
-class LecturerSeralizer(serializers.Serializer):
+class LecturerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lecturer
         fields = '__all__'
 
-class StudentSerializer(serializers.Serializer):
+class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = '__all__'
         
 
-class TimetableSerializer(serializers.Serializer):
+class TimetableSerializer(serializers.ModelSerializer):
     class Meta:
         model = Timetable
         fields = '__all__'
 
     
     def prevent_conflict(self, data):
-        """We want to prevent collision therefore we first fetch existing data"""
+        #We want to prevent collision therefore we first fetch existing data
         details = Timetable.objects.filter(
             lecturer = data['lecturer'],
             week_day = data['week_day']
